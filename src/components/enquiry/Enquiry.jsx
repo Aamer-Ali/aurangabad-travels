@@ -4,16 +4,23 @@ import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Input from "../common/Input";
-
-import { trains, placeFromArray, placeToArray } from "../../servies/DummyData";
+import { sendEnquiryForm } from "../../servies/enquiryService";
+import {
+  trains,
+  placeFromArray,
+  placeToArray,
+  transposrtMode,
+} from "../../servies/DummyData";
 
 function Enquiry(props) {
+  //Data Initializations
   const intilaValues = {
     username: "",
     email: "",
     mobile: "",
     address: "",
     numberOfSeats: 0,
+    modeOfTransport: "",
     train: "",
     // trainId: 0,
     locationTo: "",
@@ -25,23 +32,9 @@ function Enquiry(props) {
   const [formValues, setFormValues] = useState(intilaValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [showTrainDD, setShowTrainDD] = useState(false);
 
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [mobile, setMobile] = useState("");
-  // const [address, setAddress] = useState("");
-  // const [train, setTrain] = useState("");
-  // const [to, setTo] = useState("");
-  // const [from, setFrom] = useState("");
-  // const [date, onDateChange] = useState(new Date());
-
-  const booTicket = (e) => {
-    e.preventDefault();
-    setFormErrors(validateValues(formValues));
-
-    setIsSubmit(true);
-  };
-
+  //First UseEffect Hook
   useEffect(() => {
     console.log(formErrors);
     if (Object.keys(formErrors).length === 0 && isSubmit) {
@@ -49,6 +42,35 @@ function Enquiry(props) {
     }
   }, [formErrors]);
 
+  //Handel text change on text fields
+  const handleChange = (e) => {
+    const { name, value } = e.currentTarget;
+    setFormValues({ ...formValues, [name]: value });
+    // console.log(formValues);
+  };
+
+  //Make select mode of transport
+  const setModeOfTransport = (event) => {
+    // console.log(event.target.value);
+    formValues.modeOfTransport = event.target.value;
+    // if (event.target.value === "Train") {
+    //   setShowTrainDD(true);
+    // } else {
+    //   setShowTrainDD(false);
+    // }
+  };
+
+  //Submit EnquiryForm
+  const booTicket = async (e) => {
+    e.preventDefault();
+    setFormErrors(validateValues(formValues));
+    if (Object.entries(formErrors).length === 0) {
+      const response = await sendEnquiryForm(formValues);
+      console.log(response.data);
+    }
+  };
+
+  //Field Validation Before Submitting Form
   const validateValues = (values) => {
     const errors = {};
     // const regExForEmail =
@@ -61,21 +83,20 @@ function Enquiry(props) {
     }
     if (!values.mobile) {
       errors.mobile = "Mobile is required";
+    } else if (values.mobile.length < 2 || values.mobile.length > 10) {
+      errors.mobile = "Please enter proper mobile number";
     }
-    // else if (values.mobile.length < 0 && values.mobile.length > 10) {
-    //   errors.mobile = "Please enter proper mobile number";
-    // }
     if (!values.address) {
       errors.address = "Address is required";
     }
     if (values.numberOfSeats < 1) {
       errors.numberOfSeats = "Please enter number of seats required";
     }
-    if (!values.train) {
-      errors.train = "Please select train";
-    } else if (values.train.value < 1) {
-      errors.train = "Please select proper train";
-    }
+    // if (!values.train) {
+    //   errors.train = "Please select train";
+    // } else if (values.train.value < 1) {
+    //   errors.train = "Please select proper train";
+    // }
     if (!values.locationFrom) {
       errors.locationFrom = "Please select from where to go";
     }
@@ -85,21 +106,31 @@ function Enquiry(props) {
     return errors;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.currentTarget;
-    setFormValues({ ...formValues, [name]: value });
-    console.log(formValues);
-  };
+  // const genericValidate = (values) => {
+  //   const errors = {};
+  //   const keys = Object.keys(values);
+  //   console.log(keys);
+  //   for (let i = 0; i < keys.length; i++) {
+  //     // console.log();
+  //     if (!values[keys[i]]) {
+  //       errors[keys[i]] = `Please enter ${keys[i]}`;
+  //     }
+  //   }
+  //   return errors;
+  // };
 
+  //retrun Method
   return (
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-6 col-sm-6 col-xlg-6 col-12 card mt-3 mb-3">
-          <div className="display-6 ">
+          <div className="display-6" style={{ fontSize: "22px" }}>
             Hi, Welcome to the Aurangabad Travels..
           </div>
 
-          <div className="">Please Fill thew Form</div>
+          <div className="display-6" style={{ fontSize: "15px" }}>
+            Please Fill thew Form
+          </div>
 
           <form className="justify-content-start">
             <Input
@@ -111,7 +142,6 @@ function Enquiry(props) {
               onChange={handleChange}
               errors={formErrors}
             />
-
             <Input
               type="text"
               name="email"
@@ -121,7 +151,6 @@ function Enquiry(props) {
               onChange={handleChange}
               errors={formErrors}
             />
-
             <Input
               type="text"
               name="mobile"
@@ -131,7 +160,6 @@ function Enquiry(props) {
               onChange={handleChange}
               errors={formErrors}
             />
-
             <TextArea
               name="address"
               id="address"
@@ -141,7 +169,6 @@ function Enquiry(props) {
               errors={formErrors}
               onChange={handleChange}
             />
-
             <Input
               type="number"
               name="numberOfSeats"
@@ -152,27 +179,47 @@ function Enquiry(props) {
               onChange={handleChange}
             />
 
-            <select
-              name="train"
-              id="train"
-              onChange={(e) => {
-                setFormValues({
-                  ...formValues,
-                  ["train"]: trains[e.currentTarget.value],
-                });
-              }}
-              className="cform-control form-select "
-            >
-              {!trains
-                ? null
-                : trains.map((train, index) => (
-                    <option key={train.value} value={train.value}>
-                      {train.name}
-                    </option>
-                  ))}
-            </select>
-            <p className="errors text-start">{formErrors["train"]}</p>
+            <div onChange={setModeOfTransport} className="row">
+              {transposrtMode.map((t) => {
+                return (
+                  <div
+                    key={t.value}
+                    className="col-md-3 col-sm-3 col-xlg-3 col-xs-3 justify-content-start"
+                  >
+                    <input
+                      type="radio"
+                      value={t.value}
+                      name="transportType"
+                      className="me-1"
+                    />
+                    {t.name}
+                  </div>
+                );
+              })}
+            </div>
 
+            {showTrainDD === true ? (
+              <select
+                name="train"
+                id="train"
+                onChange={(e) => {
+                  setFormValues({
+                    ...formValues,
+                    ["train"]: trains[e.currentTarget.value],
+                  });
+                }}
+                className="cform-control form-select "
+              >
+                {!trains
+                  ? null
+                  : trains.map((train, index) => (
+                      <option key={train.value} value={train.value}>
+                        {train.name}
+                      </option>
+                    ))}
+              </select>
+            ) : null}
+            <p className="errors text-start">{formErrors["train"]}</p>
             <div className="row">
               <div className="col-md-6 col-sm-6 col-xlg-6 col-12">
                 <select
@@ -222,7 +269,6 @@ function Enquiry(props) {
                 <p className="errors text-start">{formErrors["locationTo"]}</p>
               </div>
             </div>
-
             <Calendar
               onChange={(e) => {
                 // const date = e.getDate();

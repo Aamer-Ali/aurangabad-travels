@@ -35,4 +35,11 @@ const placeToArray = [
   { value: 10, name: "Jaisalmer" },
 ];
 
-export { trains, placeToArray, placeFromArray };
+const transposrtMode = [
+  { value: 1, name: "Bus" },
+  { value: 2, name: "Train" },
+  { value: 3, name: "Plane" },
+  { value: 4, name: "Car" },
+];
+
+export { trains, placeToArray, placeFromArray, transposrtMode };
