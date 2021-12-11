@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     // <nav className="navbar navbar-expand-lg navbar-light bg-light nav-bar-back-color">  fixed-top
-    <nav className="navbar   navbar-expand-lg navbar-light  nav-bar-back-color">
+    <nav className="navbar navbar-expand-lg sticky-top navbar-dark  nav-bar-back-color">
       <Link className="ms-5 navbar-brand" to="/">
         Sample App For Test
       </Link>
@@ -45,6 +45,11 @@ function Navbar() {
           <li className="nav-item">
             <Link className="nav-link" to="/ticket-enquiry-page">
               Enquiry
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/ticket-enquiry-list">
+              Enquiry List
             </Link>
           </li>
           <li className="nav-item">

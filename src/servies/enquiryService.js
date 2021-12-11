@@ -4,6 +4,7 @@ import http from "./httpServices";
 const apiEndpont = "http://localhost:3000/api/enquiry";
 
 export function sendEnquiryForm(body) {
+  console.log("SENDING-----> ", body.date);
   const enquiryDataBody = {
     customerName: body.username,
     email: body.email,
@@ -18,4 +19,8 @@ export function sendEnquiryForm(body) {
   };
   //   console.log(body);
   return http.post(apiEndpont, enquiryDataBody);
+}
+
+export function getEnquiryList() {
+  return http.get(apiEndpont + "/list");
 }

@@ -9,16 +9,18 @@ import MakeTicketBooking from "./components/make-ticket-booking/MakeTicketBookin
 import Transactions from "./components/transactions.jsx/Transactions";
 import Login from "./components/login/Login";
 import OurPackages from "./components/our-packages/OurPackages";
+import EnquiryList from "./components/enquiry/EnquiryList";
 
 function App() {
   return (
     <div className="App fill-window ">
       <Navbar />
-      <div className="container">
+      <div className="container-fluid">
         <Routes>
           <Route path="/" exact element={<Home />} />
           <Route path="/our-packages-page" element={<OurPackages />} />
           <Route path="/ticket-enquiry-page" element={<Enquiry />} />
+          <Route path="/ticket-enquiry-list" element={<EnquiryList />} />
           <Route path="/contact-us-page" element={<ContactUs />} />
           <Route path="/make-booking-page" element={<MakeTicketBooking />} />
           <Route path="/transactions-page" element={<Transactions />} />

@@ -20,7 +20,7 @@ function Enquiry(props) {
     mobile: "",
     address: "",
     numberOfSeats: 0,
-    modeOfTransport: "",
+    modeOfTransport: 0,
     train: "",
     // trainId: 0,
     locationTo: "",
@@ -52,6 +52,7 @@ function Enquiry(props) {
   //Make select mode of transport
   const setModeOfTransport = (event) => {
     // console.log(event.target.value);
+
     formValues.modeOfTransport = event.target.value;
     // if (event.target.value === "Train") {
     //   setShowTrainDD(true);
@@ -92,6 +93,9 @@ function Enquiry(props) {
     if (values.numberOfSeats < 1) {
       errors.numberOfSeats = "Please enter number of seats required";
     }
+    if (values.modeOfTransport < 1) {
+      errors.modeOfTransport = "Please select mode of transport";
+    }
     // if (!values.train) {
     //   errors.train = "Please select train";
     // } else if (values.train.value < 1) {
@@ -125,7 +129,7 @@ function Enquiry(props) {
       <div className="row justify-content-center">
         <div className="col-md-6 col-sm-6 col-xlg-6 col-12 card mt-3 mb-3">
           <div className="display-6" style={{ fontSize: "22px" }}>
-            Hi, Welcome to the Aurangabad Travels..
+            Hi, Welcome to the Aurangabad Travels.
           </div>
 
           <div className="display-6" style={{ fontSize: "15px" }}>
@@ -197,6 +201,7 @@ function Enquiry(props) {
                 );
               })}
             </div>
+            <p className="errors text-start">{formErrors["modeOfTransport"]}</p>
 
             {showTrainDD === true ? (
               <select
@@ -274,7 +279,11 @@ function Enquiry(props) {
                 // const date = e.getDate();
                 // const month = e.getMonth();
                 // const year = e.getFullYear();
-
+                // console.log("CHANGED ---- >", e);
+                // console.log("CHANGED ---- >", new Date());
+                var date = "12/12/2021";
+                var d = new Date(date);
+                console.log("CHANGED ---- >", d);
                 setFormValues({
                   ...formValues,
                   ["date"]: e,

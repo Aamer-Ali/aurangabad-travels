@@ -18,11 +18,13 @@ code {
 }
 
 .nav-bar-back-color {
-  background-color: ivory;
+  /* background-color: ivory; */
+  background-color: rgb(0, 35, 102);
+  /* color: white; */
 }
 
 .fill-window {
-  background: rgb(83, 89, 108);
+  /* background: rgb(83, 89, 108); */
   height: 100%;
   position: absolute;
   left: 0;
