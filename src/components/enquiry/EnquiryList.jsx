@@ -8,7 +8,7 @@ function EnquiryList() {
     async function getEnquiry() {
       const response = await getEnquiryList();
       setEnqList(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     }
     getEnquiry();
   }, []);
@@ -39,7 +39,7 @@ function EnquiryList() {
                 <td>{enquiry.date_of_enquiry}</td>
                 <td>
                   <button
-                    class="btn btn-success"
+                    className="btn btn-success"
                     onClick={(e) => {
                       console.log(enquiry.enquiry_id);
                     }}
@@ -48,7 +48,7 @@ function EnquiryList() {
                   </button>
                 </td>
                 <td>
-                  <button class="btn btn-danger"> Cancle </button>
+                  <button className="btn btn-danger"> Cancle </button>
                 </td>
               </tr>
             ))}
