@@ -8,8 +8,9 @@ export function loginUser(body) {
   const loginDataBody = {
     username: body.username,
     password: body.password,
+    userType: body.userType,
   };
-  //   console.log(body);
+  // console.log(body);
   return http.post(apiEndpont + "/login_user", loginDataBody);
 }
 

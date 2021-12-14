@@ -14,8 +14,8 @@ export function sendEnquiryForm(body) {
     modeOfTransport: parseInt(body.modeOfTransport),
     locationTo: body.locationTo,
     locationFrom: body.locationFrom,
-    travelingDate: body.date,
-    enquiryDate: new Date(),
+    travelingDate: body.date.toString(),
+    enquiryDate: new Date().toString(),
   };
   //   console.log(body);
   return http.post(apiEndpont, enquiryDataBody);
@@ -23,4 +23,8 @@ export function sendEnquiryForm(body) {
 
 export function getEnquiryList() {
   return http.get(apiEndpont + "/list");
+}
+
+export function getEnquiryListForCustomer(custoemrId) {
+  return http.get(apiEndpont + `/list/${custoemrId}`);
 }

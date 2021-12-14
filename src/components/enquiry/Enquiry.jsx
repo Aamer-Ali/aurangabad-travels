@@ -27,6 +27,7 @@ function Enquiry(props) {
     // locationToId: 0,
     locationFrom: "",
     // locationFromId: 0,
+    // date: new Date(2021, 11, 15),
     date: new Date(),
   };
   const [formValues, setFormValues] = useState(intilaValues);
@@ -38,7 +39,7 @@ function Enquiry(props) {
   useEffect(() => {
     console.log(formErrors);
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      console.log(formValues);
+      sendDataToServer();
     }
   }, [formErrors]);
 
@@ -65,10 +66,13 @@ function Enquiry(props) {
   const booTicket = async (e) => {
     e.preventDefault();
     setFormErrors(validateValues(formValues));
-    if (Object.entries(formErrors).length === 0) {
-      const response = await sendEnquiryForm(formValues);
-      console.log(response.data);
-    }
+    setIsSubmit(true);
+  };
+
+  //send Data to server
+  const sendDataToServer = async () => {
+    const response = await sendEnquiryForm(formValues);
+    console.log(response.data);
   };
 
   //Field Validation Before Submitting Form
@@ -109,19 +113,6 @@ function Enquiry(props) {
     }
     return errors;
   };
-
-  // const genericValidate = (values) => {
-  //   const errors = {};
-  //   const keys = Object.keys(values);
-  //   console.log(keys);
-  //   for (let i = 0; i < keys.length; i++) {
-  //     // console.log();
-  //     if (!values[keys[i]]) {
-  //       errors[keys[i]] = `Please enter ${keys[i]}`;
-  //     }
-  //   }
-  //   return errors;
-  // };
 
   //retrun Method
   return (
@@ -274,19 +265,17 @@ function Enquiry(props) {
                 <p className="errors text-start">{formErrors["locationTo"]}</p>
               </div>
             </div>
+
+            {/* <input type="calendar" /> */}
+
             <Calendar
-              onChange={(e) => {
-                // const date = e.getDate();
-                // const month = e.getMonth();
-                // const year = e.getFullYear();
-                // console.log("CHANGED ---- >", e);
-                // console.log("CHANGED ---- >", new Date());
+              onChange={(value) => {
                 var date = "12/12/2021";
                 var d = new Date(date);
-                console.log("CHANGED ---- >", d);
+                console.log("CHANGED ---- >", value.toString());
                 setFormValues({
                   ...formValues,
-                  ["date"]: e,
+                  ["date"]: value,
                 });
               }}
               value={formValues.date}

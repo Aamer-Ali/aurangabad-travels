@@ -15,7 +15,6 @@ import EnquiryList from "./components/enquiry/EnquiryList";
 import Logout from "./components/logout/Logout";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
-
 class App extends React.Component {
   state = {};
 
@@ -24,7 +23,7 @@ class App extends React.Component {
       const jwt = localStorage.getItem("user_token");
       const user = jwtDecode(jwt);
       this.setState({ user });
-      console.log("App Js File....", user);
+      // console.log("App Js File....", user);
     } catch (excp) {}
   }
 
@@ -37,11 +36,12 @@ class App extends React.Component {
           <Routes>
             <Route path="/" exact element={<Home />} />
             <Route path="/our-packages-page" element={<OurPackages />} />
-            <Route path="/ticket-enquiry-page" element={<Enquiry />} />
             <Route
-              path="/ticket-enquiry-list"
-              element={user ? <EnquiryList /> : <Navigate to="login-page" />}
+              path="/ticket-enquiry-page"
+              element={user ? <Enquiry /> : <Navigate to="login-page" />}
             />
+            {/* <Route path="/ticket-enquiry-list"element={user ? <EnquiryList /> : <Navigate to="login-page" />}/> */}
+            <Route path="/ticket-enquiry-list" element={<EnquiryList />} />
             <Route path="/contact-us-page" element={<ContactUs />} />
             <Route path="/make-booking-page" element={<MakeTicketBooking />} />
             <Route path="/transactions-page" element={<Transactions />} />
@@ -49,7 +49,11 @@ class App extends React.Component {
               path="/user-registration-page"
               element={<UserRegsitration />}
             />
-            <Route path="/login-page" element={<Login />} />
+            <Route
+              // path="/login-page" element={user ? <Navigate to="/logout-page" /> : <Login />}
+              path="/login-page"
+              element={<Login />}
+            />
             <Route path="/logout-page" element={<Logout />} />
             <Route path="*" element={<Navigate to="/login-page" />} />
           </Routes>

@@ -10,8 +10,10 @@ function Login() {
   const intilaValues = {
     username: "",
     password: "",
+    userType: 0, // 2 For Customer .. 1 for Employee
   };
   const [formValues, setFormValues] = useState(intilaValues);
+
   const [formErrors, setFormErrors] = useState({});
   const [loginError, setLoginError] = useState(false);
   const navigate = useNavigate();
@@ -30,10 +32,11 @@ function Login() {
     setFormErrors(validateValues(formValues));
     if (Object.entries(formErrors).length === 0) {
       const { data } = await loginUser(formValues);
+      // const response = await loginUser(formValues);
+      // console.log(response);
       if (data.data !== null) {
-        // console.log(data.data);
+        // console.log(data);
         localStorage.setItem("user_token", data.data);
-        // navigate("/");
         window.location = "/";
         setLoginError(false);
       } else {
@@ -57,6 +60,9 @@ function Login() {
     if (!values.password) {
       errors.password = "Please enter your password";
     }
+    if (values.userType === 0) {
+      errors.userType = "Please select user type";
+    }
 
     return errors;
   };
@@ -68,6 +74,38 @@ function Login() {
           <div className="display-6 mb-2">Login</div>
           {/* <form onSubmit={handleSubmit(submitRegisterationForm)}> */}
           <form>
+            <div className="row mb-3">
+              <div className="col">
+                <input
+                  onClick={(e) => {
+                    formValues.userType = 1;
+                  }}
+                  className="form-check-input"
+                  type="radio"
+                  name="radioUserSelection"
+                  id="rdbtnEmployee"
+                />
+                <label className="form-check-label" htmlFor="rdbtnEmployee">
+                  Employee
+                </label>
+              </div>
+              <div className="col">
+                <input
+                  onClick={(e) => {
+                    formValues.userType = 2;
+                  }}
+                  className="form-check-input"
+                  type="radio"
+                  name="radioUserSelection"
+                  id="rdbtnCustomer"
+                />
+                <label className="form-check-label" htmlFor="rdbtnCustomer">
+                  Customer
+                </label>
+              </div>
+            </div>
+            <p className="errors text-start">{formErrors["userType"]}</p>
+
             <Input
               type="text"
               name="username"

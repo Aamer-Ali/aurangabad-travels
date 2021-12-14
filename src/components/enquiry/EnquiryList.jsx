@@ -1,17 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { getEnquiryList } from "../../servies/enquiryService";
+import {
+  getEnquiryList,
+  getEnquiryListForCustomer,
+} from "../../servies/enquiryService";
+import jwtDecode from "jwt-decode";
 
 function EnquiryList() {
   const [enqList, setEnqList] = useState([]);
+  const [savedUser, setSavedUser] = useState();
 
   useEffect(() => {
-    async function getEnquiry() {
-      const response = await getEnquiryList();
-      setEnqList(response.data);
-      // console.log(response.data);
-    }
-    getEnquiry();
+    // async function getEnquiry() {
+    try {
+      const jwt = localStorage.getItem("user_token");
+      const userFromToken = jwtDecode(jwt);
+      setSavedUser(userFromToken);
+      getEnquiry(
+        userFromToken["role_id"],
+        userFromToken["role_id"] === 0 ? userFromToken["customer_id"] : null
+      );
+    } catch (excp) {}
+    //   let response;
+    //   // if (savedUser["role_id"] === 0) {
+    //   // response = await getEnquiryListForCustomer(savedUser["customer_id"]);
+    //   // } else {
+    //   response = await getEnquiryList();
+    //   // }
+    //   setEnqList(response.data);
+    //   // console.log(response.data);
+    // }
   }, []);
+
+  const getEnquiry = async (role_id, customer_id) => {
+    // console.log("---->", role_id, customer_id);
+    let response;
+    if (role_id === 0) {
+      response = await getEnquiryListForCustomer(10);
+    } else {
+      response = await getEnquiryList();
+    }
+    setEnqList(response.data.data);
+  };
 
   return (
     <div>

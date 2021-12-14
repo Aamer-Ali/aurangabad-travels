@@ -16,7 +16,7 @@ function Navbar1({ user }) {
     }
   };
 
-  console.log(user);
+  // console.log(user);
 
   return (
     // <nav className="navbar navbar-expand-lg navbar-light bg-light nav-bar-back-color">  fixed-top
@@ -69,18 +69,20 @@ function Navbar1({ user }) {
             </Link>
           </li>
 
-          {user && (
+          {user && user.role_id !== 0 && (
             <React.Fragment>
               <li className="nav-item">
                 <Link className="nav-link " to="/make-booking-page">
                   Make Booking
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link " to="/transactions-page">
-                  Transactions
-                </Link>
-              </li>
+              {user && user.role_id === 1 && (
+                <li className="nav-item">
+                  <Link className="nav-link " to="/transactions-page">
+                    Transactions
+                  </Link>
+                </li>
+              )}
               <li className="nav-item">
                 <Link className="nav-link " to="/user-registration-page">
                   User Registration
