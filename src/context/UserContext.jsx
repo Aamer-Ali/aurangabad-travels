@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const UserContext = React.createContext();
 
 export const UserProvider = (props) => {
-  const [loggedUser, setLoggedUser] = useState("");
+  const [loggedUser, setLoggedUser] = useState("initials");
 
   const update = (product) => {
     // setCartItem([...cartItem, product]);
@@ -11,7 +11,7 @@ export const UserProvider = (props) => {
   };
 
   return (
-    <UserContext.Provider value={[loggedUser, setLoggedUser, update]}>
+    <UserContext.Provider value={[loggedUser, setLoggedUser]}>
       {props.children}
     </UserContext.Provider>
   );

@@ -4,10 +4,12 @@ import {
   getEnquiryListForCustomer,
 } from "../../servies/enquiryService";
 import jwtDecode from "jwt-decode";
+import { Badge } from "react-bootstrap";
 
 function EnquiryList() {
   const [enqList, setEnqList] = useState([]);
   const [savedUser, setSavedUser] = useState();
+  const [roleId, setRoleId] = useState();
 
   useEffect(() => {
     // async function getEnquiry() {
@@ -32,6 +34,7 @@ function EnquiryList() {
   }, []);
 
   const getEnquiry = async (role_id, customer_id) => {
+    setRoleId(role_id);
     // console.log("---->", role_id, customer_id);
     let response;
     if (role_id === 0) {
@@ -44,9 +47,8 @@ function EnquiryList() {
 
   return (
     <div>
-      <div>Enquiry list</div>
       {enqList.length === 0 ? null : (
-        <table className="table table-hover">
+        <table className="table table-hover text-start">
           <thead>
             <tr>
               <th scope="col">Sr.No</th>
@@ -55,6 +57,7 @@ function EnquiryList() {
               <th scope="col">To Location</th>
               <th scope="col">Travelling Date</th>
               <th scope="col">Enquiry Date</th>
+              <th scope="col">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -67,18 +70,33 @@ function EnquiryList() {
                 <td>{enquiry.date_of_travelling}</td>
                 <td>{enquiry.date_of_enquiry}</td>
                 <td>
-                  <button
-                    className="btn btn-success"
-                    onClick={(e) => {
-                      console.log(enquiry.enquiry_id);
-                    }}
-                  >
-                    Go
-                  </button>
+                  {enquiry.status === 0 && <Badge bg="warning">Pending</Badge>}
+                  {enquiry.status === 1 && (
+                    <Badge bg="success">Completed</Badge>
+                  )}
+                  {enquiry.status === 2 && <Badge bg="danger">Cancled</Badge>}
                 </td>
-                <td>
-                  <button className="btn btn-danger"> Cancle </button>
-                </td>
+                {roleId !== 0 && (
+                  <td>
+                    {enquiry.status === 0 ? (
+                      <button
+                        className="btn btn-success"
+                        onClick={(e) => {
+                          console.log(enquiry.enquiry_id);
+                        }}
+                      >
+                        Go
+                      </button>
+                    ) : null}
+                  </td>
+                )}
+                {roleId !== 0 && (
+                  <td>
+                    {enquiry.status === 0 ? (
+                      <button className="btn btn-danger"> Cancle </button>
+                    ) : null}
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -89,18 +107,3 @@ function EnquiryList() {
 }
 
 export default EnquiryList;
-
-// "customer_id": 10,
-// "customer_name": "Aamer",
-// "customer_email": "aamer@gmail.com",
-// "customer_mobile": "9028030984",
-// "customer_address": "Kat Kat Gate",
-// "number_of_seats": 12,
-// "from_place_id": 1,
-// "from_place_name": "Aurangabd",
-// "to_place_id": 2,
-// "to_place_name": "Bombay",
-// "mode_of_transport": 1,
-// "mode_name": "Car",
-// "date_of_enquiry": "2021-12-10T11:45:34.000Z",
-// "date_of_travelling": "2021-12-10T11:45:34.000Z"

@@ -14,6 +14,10 @@ import OurPackages from "./components/our-packages/OurPackages";
 import EnquiryList from "./components/enquiry/EnquiryList";
 import Logout from "./components/logout/Logout";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import { UserProvider } from "./context/UserContext";
+import BranchMaster from "./components/masters/BranchMaster";
+import PlaceMaster from "./components/masters/PlaceMaster";
+import ModeOfTransportMaster from "./components/masters/ModeOfTransportMaster";
 
 class App extends React.Component {
   state = {};
@@ -30,35 +34,41 @@ class App extends React.Component {
   render() {
     const { user } = this.state;
     return (
-      <div className="App fill-window ">
-        <Navbar1 user={this.state.user} />
-        <div className="container-fluid">
-          <Routes>
-            <Route path="/" exact element={<Home />} />
-            <Route path="/our-packages-page" element={<OurPackages />} />
-            <Route
-              path="/ticket-enquiry-page"
-              element={user ? <Enquiry /> : <Navigate to="login-page" />}
-            />
-            {/* <Route path="/ticket-enquiry-list"element={user ? <EnquiryList /> : <Navigate to="login-page" />}/> */}
-            <Route path="/ticket-enquiry-list" element={<EnquiryList />} />
-            <Route path="/contact-us-page" element={<ContactUs />} />
-            <Route path="/make-booking-page" element={<MakeTicketBooking />} />
-            <Route path="/transactions-page" element={<Transactions />} />
-            <Route
-              path="/user-registration-page"
-              element={<UserRegsitration />}
-            />
-            <Route
-              // path="/login-page" element={user ? <Navigate to="/logout-page" /> : <Login />}
-              path="/login-page"
-              element={<Login />}
-            />
-            <Route path="/logout-page" element={<Logout />} />
-            <Route path="*" element={<Navigate to="/login-page" />} />
-          </Routes>
+      <UserProvider>
+        <div className="App fill-window">
+          <Navbar1 user={this.state.user} />
+          <div className="container-fluid">
+            <Routes>
+              <Route path="/" exact element={<Home />} />
+              <Route path="/our-packages-page" element={<OurPackages />} />
+              <Route path="/ticket-enquiry-page" element={<Enquiry />} />
+              {/* <Route path="/ticket-enquiry-list"element={user ? <EnquiryList /> : <Navigate to="login-page" />}/> */}
+              <Route path="/ticket-enquiry-list" element={<EnquiryList />} />
+              <Route path="/contact-us-page" element={<ContactUs />} />
+              <Route
+                path="/make-booking-page"
+                element={<MakeTicketBooking />}
+              />
+              <Route path="/transactions-page" element={<Transactions />} />
+              <Route
+                path="/user-registration-page"
+                element={<UserRegsitration />}
+              />
+              <Route path="/branch-master" element={<BranchMaster />} />
+              <Route path="/place-master" element={<PlaceMaster />} />
+              <Route path="/mode-of-transport-master" element={<ModeOfTransportMaster />} />
+
+              <Route
+                // path="/login-page" element={user ? <Navigate to="/logout-page" /> : <Login />}
+                path="/login-page"
+                element={<Login />}
+              />
+              <Route path="/logout-page" element={<Logout />} />
+              <Route path="*" element={<Navigate to="/login-page" />} />
+            </Routes>
+          </div>
         </div>
-      </div>
+      </UserProvider>
     );
   }
 }

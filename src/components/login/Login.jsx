@@ -1,8 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "react-calendar/dist/Calendar.css";
 // import { useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../../context/UserContext";
 import { loginUser } from "../../servies/userService";
 import Input from "../common/Input";
 
@@ -13,9 +14,10 @@ function Login() {
     userType: 0, // 2 For Customer .. 1 for Employee
   };
   const [formValues, setFormValues] = useState(intilaValues);
-
   const [formErrors, setFormErrors] = useState({});
   const [loginError, setLoginError] = useState(false);
+  const [loggedUser, setLoggedUser] = useContext(UserContext);
+
   const navigate = useNavigate();
 
   //Handel text change on text fields
@@ -37,6 +39,9 @@ function Login() {
       if (data.data !== null) {
         // console.log(data);
         localStorage.setItem("user_token", data.data);
+        setLoggedUser("Hello World");
+        // navigate("../", { replace: true });
+
         window.location = "/";
         setLoginError(false);
       } else {
@@ -63,7 +68,6 @@ function Login() {
     if (values.userType === 0) {
       errors.userType = "Please select user type";
     }
-
     return errors;
   };
 
