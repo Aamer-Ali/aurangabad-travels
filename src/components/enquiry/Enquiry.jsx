@@ -5,23 +5,28 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Input from "../common/Input";
 import { sendEnquiryForm } from "../../servies/enquiryService";
-import {
-  trains,
-  placeFromArray,
-  placeToArray,
-  transposrtMode,
-} from "../../servies/DummyData";
+import jwtDecode from "jwt-decode";
+import // trains,
+// placeFromArray,
+// placeToArray,
+// transposrtMode,
+"../../servies/DummyData";
+import { Card, Col, Form, Row, Button, FloatingLabel } from "react-bootstrap";
+import { getCurrentUser } from "../../servies/userService";
+import { getPlaceList } from "../../servies/placesService";
+import { getModeOfTransport } from "../../servies/modeOfTransportService";
 
 function Enquiry(props) {
   //Data Initializations
   const intilaValues = {
-    username: "",
-    email: "",
-    mobile: "",
-    address: "",
+    user_id: 0,
+    // username: "",
+    // email: "",
+    // mobile: "",
+    // address: "",
     numberOfSeats: 0,
     modeOfTransport: 0,
-    train: "",
+    // train: "",
     // trainId: 0,
     locationTo: "",
     // locationToId: 0,
@@ -33,9 +38,32 @@ function Enquiry(props) {
   const [formValues, setFormValues] = useState(intilaValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-  const [showTrainDD, setShowTrainDD] = useState(false);
+  // const [showTrainDD, setShowTrainDD] = useState(false);
+  const [userFromToken, setUserFromToken] = useState({});
+  const [places, setPlaces] = useState([]);
+  const [transposrtMode, setTransposrtMode] = useState([]);
+  const currenDate = new Date();
 
-  //First UseEffect Hook
+  // UseEffect to get uesr data from token
+  useEffect(() => {
+    const getPlaces = async () => {
+      const response = await getPlaceList();
+      setPlaces(response.data.data);
+    };
+
+    const getModesOfTransport = async () => {
+      const response = await getModeOfTransport();
+      setTransposrtMode(response.data.data);
+    };
+
+    try {
+      setUserFromToken(getCurrentUser());
+      getPlaces();
+      getModesOfTransport();
+    } catch (excp) {}
+  }, []);
+
+  // UseEffect Hook for submitting data to server if there is no error after validation
   useEffect(() => {
     console.log(formErrors);
     if (Object.keys(formErrors).length === 0 && isSubmit) {
@@ -65,6 +93,7 @@ function Enquiry(props) {
   //Submit EnquiryForm
   const booTicket = async (e) => {
     e.preventDefault();
+    setFormValues({ ...formValues, ["user_id"]: userFromToken.user_id });
     setFormErrors(validateValues(formValues));
     setIsSubmit(true);
   };
@@ -72,7 +101,10 @@ function Enquiry(props) {
   //send Data to server
   const sendDataToServer = async () => {
     const response = await sendEnquiryForm(formValues);
-    console.log(response.data);
+    if (response.data.status === true) {
+      // alert("Enquiry Submit");
+      window.location = "/ticket-enquiry-list";
+    }
   };
 
   //Field Validation Before Submitting Form
@@ -80,20 +112,21 @@ function Enquiry(props) {
     const errors = {};
     // const regExForEmail =
     // /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (!values.username) {
-      errors.username = "Please enter your name";
-    }
-    if (!values.email) {
-      errors.email = "Email is required";
-    }
-    if (!values.mobile) {
-      errors.mobile = "Mobile is required";
-    } else if (values.mobile.length < 2 || values.mobile.length > 10) {
-      errors.mobile = "Please enter proper mobile number";
-    }
-    if (!values.address) {
-      errors.address = "Address is required";
-    }
+
+    // if (!values.username) {
+    //   errors.username = "Please enter your name";
+    // }
+    // if (!values.email) {
+    //   errors.email = "Email is required";
+    // }
+    // if (!values.mobile) {
+    //   errors.mobile = "Mobile is required";
+    // } else if (values.mobile.length < 2 || values.mobile.length > 10) {
+    //   errors.mobile = "Please enter proper mobile number";
+    // }
+    // if (!values.address) {
+    //   errors.address = "Address is required";
+    // }
     if (values.numberOfSeats < 1) {
       errors.numberOfSeats = "Please enter number of seats required";
     }
@@ -111,6 +144,10 @@ function Enquiry(props) {
     if (!values.locationTo) {
       errors.locationTo = "Please select the destination";
     }
+
+    if (values.date < currenDate.setHours(0, 0, 0, 0)) {
+      errors.date = "Please select the valid date";
+    }
     return errors;
   };
 
@@ -127,13 +164,15 @@ function Enquiry(props) {
             Please Fill thew Form
           </div>
 
-          <form className="justify-content-start">
+          <Form className="justify-content-start">
             <Input
               type="text"
               name="username"
               id="username"
               placeholder="Name"
               className="form-control "
+              value={userFromToken.first_name + " " + userFromToken.last_name}
+              disabled={true}
               onChange={handleChange}
               errors={formErrors}
             />
@@ -143,6 +182,8 @@ function Enquiry(props) {
               id="email"
               placeholder="Email"
               className="form-control "
+              value={userFromToken.user_email}
+              disabled={true}
               onChange={handleChange}
               errors={formErrors}
             />
@@ -152,10 +193,26 @@ function Enquiry(props) {
               id="mobile"
               placeholder="Mobile"
               className="form-control "
+              value={userFromToken.user_mobile}
+              disabled={true}
               onChange={handleChange}
               errors={formErrors}
             />
-            <TextArea
+
+            <FloatingLabel label="Address">
+              <Form.Control
+                as="textarea"
+                name="address"
+                id="address"
+                placeholder="Address"
+                value={userFromToken.user_address}
+                readOnly
+                style={{ height: "150px" }}
+              />
+            </FloatingLabel>
+            <p className="errors text-start">{formErrors["address"]}</p>
+
+            {/* <TextArea
               name="address"
               id="address"
               style={{ width: "100%" }}
@@ -163,7 +220,8 @@ function Enquiry(props) {
               placeholder="Address"
               errors={formErrors}
               onChange={handleChange}
-            />
+            /> */}
+
             <Input
               type="number"
               name="numberOfSeats"
@@ -178,23 +236,23 @@ function Enquiry(props) {
               {transposrtMode.map((t) => {
                 return (
                   <div
-                    key={t.value}
+                    key={t.mode_id}
                     className="col-md-3 col-sm-3 col-xlg-3 col-xs-3 justify-content-start"
                   >
                     <input
                       type="radio"
-                      value={t.value}
+                      value={t.mode_id}
                       name="transportType"
                       className="me-1"
                     />
-                    {t.name}
+                    {t.mode_name}
                   </div>
                 );
               })}
             </div>
             <p className="errors text-start">{formErrors["modeOfTransport"]}</p>
 
-            {showTrainDD === true ? (
+            {/* {showTrainDD === true ? (
               <select
                 name="train"
                 id="train"
@@ -214,8 +272,9 @@ function Enquiry(props) {
                       </option>
                     ))}
               </select>
-            ) : null}
-            <p className="errors text-start">{formErrors["train"]}</p>
+            ) : null} 
+            <p className="errors text-start">{formErrors["train"]}</p> */}
+
             <div className="row">
               <div className="col-md-6 col-sm-6 col-xlg-6 col-12">
                 <select
@@ -224,16 +283,16 @@ function Enquiry(props) {
                   onChange={(e) => {
                     setFormValues({
                       ...formValues,
-                      ["locationFrom"]: placeFromArray[e.currentTarget.value],
+                      ["locationFrom"]: places[e.currentTarget.place_id],
                     });
                   }}
                   className="form-control form-select"
                 >
-                  {!placeFromArray
+                  {!places
                     ? null
-                    : placeFromArray.map((from, index) => (
-                        <option key={from.value} value={from.value}>
-                          {from.name}
+                    : places.map((from, index) => (
+                        <option key={from.value} value={from.place_id}>
+                          {from.place_name}
                         </option>
                       ))}
                 </select>
@@ -249,16 +308,16 @@ function Enquiry(props) {
                   onChange={(e) => {
                     setFormValues({
                       ...formValues,
-                      ["locationTo"]: placeToArray[e.currentTarget.value],
+                      ["locationTo"]: places[e.currentTarget.place_id],
                     });
                   }}
                   className="cform-control form-select"
                 >
-                  {!placeToArray
+                  {!places
                     ? null
-                    : placeToArray.map((to, index) => (
-                        <option key={to.value} value={to.value}>
-                          {to.name}
+                    : places.map((to, index) => (
+                        <option key={to.value} value={to.place_id}>
+                          {to.place_name}
                         </option>
                       ))}
                 </select>
@@ -271,8 +330,8 @@ function Enquiry(props) {
             <Calendar
               onChange={(value) => {
                 var date = "12/12/2021";
-                var d = new Date(date);
-                console.log("CHANGED ---- >", value.toString());
+                // var d = new Date(date);
+                // console.log("CHANGED ---- >", value.toString());
                 setFormValues({
                   ...formValues,
                   ["date"]: value,
@@ -281,11 +340,12 @@ function Enquiry(props) {
               value={formValues.date}
               className="form-control"
             />
+            <p className="errors text-start">{formErrors["date"]}</p>
 
             <button className="btn btn-success mt-3" onClick={booTicket}>
               Enquiry For Ticket
             </button>
-          </form>
+          </Form>
         </div>
       </div>
     </div>

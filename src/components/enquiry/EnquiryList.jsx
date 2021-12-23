@@ -38,7 +38,7 @@ function EnquiryList() {
     // console.log("---->", role_id, customer_id);
     let response;
     if (role_id === 0) {
-      response = await getEnquiryListForCustomer(10);
+      response = await getEnquiryListForCustomer(1);
     } else {
       response = await getEnquiryList();
     }
@@ -64,7 +64,11 @@ function EnquiryList() {
             {enqList.map((enquiry, index) => (
               <tr key={enquiry.enquiry_id}>
                 <th scope="row">{index + 1}</th>
-                <td>{enquiry.customer_name}</td>
+                <td>
+                  {enquiry.customer_first_name +
+                    " " +
+                    enquiry.customer_last_name}
+                </td>
                 <td>{enquiry.from_place_name}</td>
                 <td>{enquiry.to_place_name}</td>
                 <td>{enquiry.date_of_travelling}</td>

@@ -4,12 +4,12 @@ import http from "./httpServices";
 const apiEndpont = "http://localhost:3000/api/enquiry";
 
 export function sendEnquiryForm(body) {
-  console.log("SENDING-----> ", body.date);
   const enquiryDataBody = {
-    customerName: body.username,
-    email: body.email,
-    mobile: body.mobile,
-    address: body.address,
+    // customerName: body.username,
+    // email: body.email,
+    // mobile: body.mobile,
+    // address: body.address,
+    user_id: parseInt(body.user_id),
     numberOfSeats: parseInt(body.numberOfSeats),
     modeOfTransport: parseInt(body.modeOfTransport),
     locationTo: body.locationTo,
@@ -17,7 +17,7 @@ export function sendEnquiryForm(body) {
     travelingDate: body.date.toString(),
     enquiryDate: new Date().toString(),
   };
-  //   console.log(body);
+  console.log(enquiryDataBody);
   return http.post(apiEndpont, enquiryDataBody);
 }
 
