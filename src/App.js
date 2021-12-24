@@ -13,11 +13,11 @@ import Login from "./components/login/Login";
 import OurPackages from "./components/our-packages/OurPackages";
 import EnquiryList from "./components/enquiry/EnquiryList";
 import Logout from "./components/logout/Logout";
-import ProtectedRoute from "./components/common/ProtectedRoute";
 import { UserProvider } from "./context/UserContext";
 import BranchMaster from "./components/masters/BranchMaster";
 import PlaceMaster from "./components/masters/PlaceMaster";
 import ModeOfTransportMaster from "./components/masters/ModeOfTransportMaster";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
 
 class App extends React.Component {
   state = {};
@@ -27,12 +27,10 @@ class App extends React.Component {
       const jwt = localStorage.getItem("user_token");
       const user = jwtDecode(jwt);
       this.setState({ user });
-      // console.log("App Js File....", user);
     } catch (excp) {}
   }
 
   render() {
-    const { user } = this.state;
     return (
       <UserProvider>
         <div className="App fill-window">
@@ -41,8 +39,9 @@ class App extends React.Component {
             <Routes>
               <Route path="/" exact element={<Home />} />
               <Route path="/our-packages-page" element={<OurPackages />} />
-              <Route path="/ticket-enquiry-page" element={<Enquiry />} />
-              {/* <Route path="/ticket-enquiry-list"element={user ? <EnquiryList /> : <Navigate to="login-page" />}/> */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/ticket-enquiry-page" element={<Enquiry />} />
+              </Route>
               <Route path="/ticket-enquiry-list" element={<EnquiryList />} />
               <Route path="/contact-us-page" element={<ContactUs />} />
               <Route
@@ -56,13 +55,11 @@ class App extends React.Component {
               />
               <Route path="/branch-master" element={<BranchMaster />} />
               <Route path="/place-master" element={<PlaceMaster />} />
-              <Route path="/mode-of-transport-master" element={<ModeOfTransportMaster />} />
-
               <Route
-                // path="/login-page" element={user ? <Navigate to="/logout-page" /> : <Login />}
-                path="/login-page"
-                element={<Login />}
+                path="/mode-of-transport-master"
+                element={<ModeOfTransportMaster />}
               />
+              <Route path="/login-page" element={<Login />} />
               <Route path="/logout-page" element={<Logout />} />
               <Route path="*" element={<Navigate to="/login-page" />} />
             </Routes>

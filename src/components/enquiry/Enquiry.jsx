@@ -1,17 +1,11 @@
 import React from "react";
-import TextArea from "../common/TextArea";
 import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { Form, FloatingLabel } from "react-bootstrap";
+
 import Input from "../common/Input";
 import { sendEnquiryForm } from "../../servies/enquiryService";
-import jwtDecode from "jwt-decode";
-import // trains,
-// placeFromArray,
-// placeToArray,
-// transposrtMode,
-"../../servies/DummyData";
-import { Card, Col, Form, Row, Button, FloatingLabel } from "react-bootstrap";
 import { getCurrentUser } from "../../servies/userService";
 import { getPlaceList } from "../../servies/placesService";
 import { getModeOfTransport } from "../../servies/modeOfTransportService";
@@ -69,7 +63,7 @@ function Enquiry(props) {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       sendDataToServer();
     }
-  }, [formErrors]);
+  }, [formErrors, isSubmit]);
 
   //Handel text change on text fields
   const handleChange = (e) => {
@@ -237,7 +231,7 @@ function Enquiry(props) {
                 return (
                   <div
                     key={t.mode_id}
-                    className="col-md-3 col-sm-3 col-xlg-3 col-xs-3 justify-content-start"
+                    className="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xlg-3 text-start"
                   >
                     <input
                       type="radio"
@@ -252,29 +246,6 @@ function Enquiry(props) {
             </div>
             <p className="errors text-start">{formErrors["modeOfTransport"]}</p>
 
-            {/* {showTrainDD === true ? (
-              <select
-                name="train"
-                id="train"
-                onChange={(e) => {
-                  setFormValues({
-                    ...formValues,
-                    ["train"]: trains[e.currentTarget.value],
-                  });
-                }}
-                className="cform-control form-select "
-              >
-                {!trains
-                  ? null
-                  : trains.map((train, index) => (
-                      <option key={train.value} value={train.value}>
-                        {train.name}
-                      </option>
-                    ))}
-              </select>
-            ) : null} 
-            <p className="errors text-start">{formErrors["train"]}</p> */}
-
             <div className="row">
               <div className="col-md-6 col-sm-6 col-xlg-6 col-12">
                 <select
@@ -283,15 +254,15 @@ function Enquiry(props) {
                   onChange={(e) => {
                     setFormValues({
                       ...formValues,
-                      ["locationFrom"]: places[e.currentTarget.place_id],
+                      ["locationFrom"]: places[e.currentTarget.value],
                     });
                   }}
                   className="form-control form-select"
                 >
                   {!places
                     ? null
-                    : places.map((from, index) => (
-                        <option key={from.value} value={from.place_id}>
+                    : places.map((from) => (
+                        <option key={from.place_id} value={from.place_id}>
                           {from.place_name}
                         </option>
                       ))}
@@ -308,15 +279,15 @@ function Enquiry(props) {
                   onChange={(e) => {
                     setFormValues({
                       ...formValues,
-                      ["locationTo"]: places[e.currentTarget.place_id],
+                      ["locationTo"]: places[e.currentTarget.value],
                     });
                   }}
                   className="cform-control form-select"
                 >
                   {!places
                     ? null
-                    : places.map((to, index) => (
-                        <option key={to.value} value={to.place_id}>
+                    : places.map((to) => (
+                        <option key={to.place_id} value={to.place_id}>
                           {to.place_name}
                         </option>
                       ))}
@@ -329,9 +300,6 @@ function Enquiry(props) {
 
             <Calendar
               onChange={(value) => {
-                var date = "12/12/2021";
-                // var d = new Date(date);
-                // console.log("CHANGED ---- >", value.toString());
                 setFormValues({
                   ...formValues,
                   ["date"]: value,

@@ -29,7 +29,6 @@ export function getToken() {
 
 export default {
   loginUser,
-
   getCurrentUser,
   getToken,
 };

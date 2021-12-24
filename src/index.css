@@ -31,3 +31,8 @@ code {
   width: 100%;
   overflow: auto;
 }
+
+.align-me {
+  display: flex;
+  align-items: center;
+}

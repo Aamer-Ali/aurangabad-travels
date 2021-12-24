@@ -1,8 +1,6 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import "react-calendar/dist/Calendar.css";
-// import { useLocation } from "react-router";
-import { useNavigate } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 import { loginUser } from "../../servies/userService";
 import Input from "../common/Input";
@@ -18,8 +16,6 @@ function Login() {
   const [loginError, setLoginError] = useState(false);
   const [loggedUser, setLoggedUser] = useContext(UserContext);
 
-  const navigate = useNavigate();
-
   //Handel text change on text fields
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -34,14 +30,9 @@ function Login() {
     setFormErrors(validateValues(formValues));
     if (Object.entries(formErrors).length === 0) {
       const { data } = await loginUser(formValues);
-      // const response = await loginUser(formValues);
-      // console.log(response);
       if (data.data !== null) {
-        // console.log(data);
         localStorage.setItem("user_token", data.data);
         setLoggedUser("Hello World");
-        // navigate("../", { replace: true });
-
         window.location = "/";
         setLoginError(false);
       } else {

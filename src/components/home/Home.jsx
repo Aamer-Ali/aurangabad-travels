@@ -1,28 +1,66 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import UserContext from "../../context/UserContext";
+import { Carousel, Col, Container, Image, Row } from "react-bootstrap";
+import banner from "../../assets/banner.jpg";
+import HomePageCarousel from "../common/HomePageCarousel";
+import HomePageContent from "../common/HomePageContent";
 
 function Home() {
-  const hs = useNavigate();
-  let loc = useLocation();
-
-  const [loggedUser, setLoggedUser] = useContext(UserContext);
-
-  const showHistory = () => {
-    // console.log("History");
-    // console.log(hs);
-
-    console.log(loc);
-  };
-
-  console.log("===>", loggedUser);
-
   return (
-    <div>
-      <div>{loggedUser && <h1>{loggedUser}</h1>}</div>
-      <div>Home Page</div>
-    </div>
+    <React.Fragment>
+      <HomePageCarousel />
+      <HomePageContent
+        imageToLeft={true}
+        content="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
+          minima sapiente at nobis optio laudantium et, quaerat temporibus
+          maxime beatae distinctio exercitationem eligendi corporis debitis?
+          Sunt nihil placeat inventore soluta? Lorem ipsum dolor sit amet,
+          consectetur adipisicing elit. Reprehenderit doloremque, omnis magnam
+          consequuntur ut, ab, asperiores facilis quae enim dignissimos
+          laboriosam ipsa iure non architecto cumque. Rem ea culpa blanditiis,
+          fugiat, molestiae voluptate ipsam cupiditate, unde et pariatur
+          sapiente! Doloremque aliquam optio, corporis numquam nulla placeat quo
+          tenetur rerum autem."
+      />
+      <HomePageContent
+        imageToLeft={false}
+        content="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
+          minima sapiente at nobis optio laudantium et, quaerat temporibus
+          maxime beatae distinctio exercitationem eligendi corporis debitis?
+          Sunt nihil placeat inventore soluta? Lorem ipsum dolor sit amet,
+          consectetur adipisicing elit. Reprehenderit doloremque, omnis magnam
+          consequuntur ut, ab, asperiores facilis quae enim dignissimos
+          laboriosam ipsa iure non architecto cumque. Rem ea culpa blanditiis,
+          fugiat, molestiae voluptate ipsam cupiditate, unde et pariatur
+          sapiente! Doloremque aliquam optio, corporis numquam nulla placeat quo
+          tenetur rerum autem."
+      />
+      <HomePageContent
+        imageToLeft={true}
+        content="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
+          minima sapiente at nobis optio laudantium et, quaerat temporibus
+          maxime beatae distinctio exercitationem eligendi corporis debitis?
+          Sunt nihil placeat inventore soluta? Lorem ipsum dolor sit amet,
+          consectetur adipisicing elit. Reprehenderit doloremque, omnis magnam
+          consequuntur ut, ab, asperiores facilis quae enim dignissimos
+          laboriosam ipsa iure non architecto cumque. Rem ea culpa blanditiis,
+          fugiat, molestiae voluptate ipsam cupiditate, unde et pariatur
+          sapiente! Doloremque aliquam optio, corporis numquam nulla placeat quo
+          tenetur rerum autem."
+      />
+      <HomePageContent
+        imageToLeft={false}
+        content="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
+          minima sapiente at nobis optio laudantium et, quaerat temporibus
+          maxime beatae distinctio exercitationem eligendi corporis debitis?
+          Sunt nihil placeat inventore soluta? Lorem ipsum dolor sit amet,
+          consectetur adipisicing elit. Reprehenderit doloremque, omnis magnam
+          consequuntur ut, ab, asperiores facilis quae enim dignissimos
+          laboriosam ipsa iure non architecto cumque. Rem ea culpa blanditiis,
+          fugiat, molestiae voluptate ipsam cupiditate, unde et pariatur
+          sapiente! Doloremque aliquam optio, corporis numquam nulla placeat quo
+          tenetur rerum autem."
+      />
+    </React.Fragment>
   );
 }
 

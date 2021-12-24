@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Badge, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 
 function Navbar1({ user }) {
   return (
@@ -12,7 +11,9 @@ function Navbar1({ user }) {
           <Nav className="me-auto text-start">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/our-packages-page">Our Packages</Nav.Link>
-            <Nav.Link href="/ticket-enquiry-page">Enquiry</Nav.Link>
+            {user && user.role_id !== 1 && (
+              <Nav.Link href="/ticket-enquiry-page">Enquiry</Nav.Link>
+            )}
             {user && (
               <Nav.Link href="/ticket-enquiry-list">Enquiry List</Nav.Link>
             )}

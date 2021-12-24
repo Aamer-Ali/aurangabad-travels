@@ -10,7 +10,7 @@ function BranchMaster() {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       sendDataToServer();
     }
-  }, [formErrors]);
+  }, [formErrors, isSubmit]);
 
   const addBranch = () => {
     setFormErrors(handleErrors());

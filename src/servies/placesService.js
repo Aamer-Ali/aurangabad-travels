@@ -1,4 +1,3 @@
-import { date } from "joi";
 import http from "./httpServices";
 
 const apiEndpont = "http://localhost:3000/api/places";

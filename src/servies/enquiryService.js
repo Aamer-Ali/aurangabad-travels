@@ -1,14 +1,9 @@
-import { date } from "joi";
 import http from "./httpServices";
 
 const apiEndpont = "http://localhost:3000/api/enquiry";
 
 export function sendEnquiryForm(body) {
   const enquiryDataBody = {
-    // customerName: body.username,
-    // email: body.email,
-    // mobile: body.mobile,
-    // address: body.address,
     user_id: parseInt(body.user_id),
     numberOfSeats: parseInt(body.numberOfSeats),
     modeOfTransport: parseInt(body.modeOfTransport),

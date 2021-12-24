@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Col, Form, Row, Button, FloatingLabel } from "react-bootstrap";
+import { Form, FloatingLabel } from "react-bootstrap";
 
 function Input({
   type,
